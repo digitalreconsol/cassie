@@ -51,6 +51,15 @@ The owner had no preference on these. They are working defaults and can be chang
 - **Frontend:** React + TypeScript, one shared design system.
 - **Sign-in:** local accounts with MFA first; SSO (OIDC/SAML) added later.
 - **App port order:** Scout (capture), Codex (verify) and Workbench (reports) first, then Watchtower, a merged Crawler (Pathfinder + Scanner), Matchbook, and Observatory.
+- **Classroom model:** one class server with browser clients. Students need only a browser, so their laptops (any OS or CPU) do not matter. The same server image runs on a cloud VM or on a machine in the room. A per-student install of the same image stays available as a fallback for offline or special cases. The owner said classes could be either laptops or provided machines, so this model avoids depending on either.
+
+### Classroom requirements (proposed)
+
+- Multiple users with an instructor role and a separate workspace per student; the instructor can see all of them.
+- Reset or snapshot a class workspace between sessions, and delete student data on request.
+- Resource limits per student, because each streamed capture browser uses real memory and CPU. Size the server by the number of concurrent students.
+- Controlled outbound traffic. All students would share one egress IP, so plan for a VPN or proxy and for rate limits or blocks from the sites being searched.
+- Works on poor networks: low-bandwidth streaming and a clear offline fallback.
 
 ### Design rules that keep the SaaS door open
 
@@ -61,7 +70,7 @@ The owner had no preference on these. They are working defaults and can be chang
 
 ### Still open
 
-- [ ] Classroom model: importable VM image vs. one hosted server with per-student accounts
+- [ ] Typical class size and whether classes are run in person, online, or both (sizes the server and the network plan)
 - [ ] Licensing and third-party tool review before redistributing anything
 - [ ] Final project name (Cassie is a working name)
 - [ ] Customers in government: which kinds (federal, state/local, law enforcement) and whether they would run it in their own environment
