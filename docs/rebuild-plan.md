@@ -45,6 +45,8 @@ Updated 2026-10-02.
 - **Report drafts** live in the app. Only exported reports go into Core, as immutable Artifacts with lineage to the evidence they cite.
 - **Oversight is strictly read-only.** No supervisor review comments for now.
 - **Capture formats:** screenshot, HTML snapshot, extracted text, and saved images and videos.
+- **Capture isolation:** a fresh disposable container for every capture.
+- **Logins:** credentials for research identities are stored in an encrypted vault, never in evidence. Users can use an identity but not read its secret; only the tenant admin can reveal it, after re-authenticating, and every use and reveal is audited.
 
 ### Defaults chosen on the owner's behalf
 
