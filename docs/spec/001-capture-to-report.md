@@ -88,6 +88,26 @@ Decided (owner, 2026-10-02):
 
 Every canonical write records trusted user, application and Research Session context from the runtime, never from client-supplied fields.
 
+## 7a. Media acquisition (scope decided by the owner: save pretty much any video)
+
+The owner needs to save video from essentially any source, such as YouTube, Douyin, Telegram and Bilibili. No single tool can guarantee that, because sites change constantly, so acquisition is layered and each Artifact records how it was obtained. Lantern's Scout already combined the first two methods (per its README and `media.py`).
+
+1. **Browser-observed capture.** The capture browser records the media requests the page makes (direct files, HLS and DASH manifests) and downloads them. This captures what the page actually served and works on sites no extractor covers.
+2. **Extractor-based download** with a maintained tool (yt-dlp is the candidate; Scout used it as its fallback). It gives clean metadata and format choices, but extractors break when sites change.
+3. **Playback recording** as a last resort: record the video as it plays. Lower fidelity, and marked as such in the metadata.
+
+The order can differ per site.
+
+Rules:
+- Save the original streams without re-encoding. Any transcode or remux for playback is a separate derived Artifact with lineage to the original (invariant 7).
+- Record for every media Artifact: the source page and media URL, acquisition method, tool and version, selected format, hash, time, and the page's own metadata (title, uploader, upload date, description) as `capture/media-metadata`.
+- Keep a screenshot of the page alongside the media so the context is preserved.
+- Extractors will break, so the capture image must be quick to rebuild with an updated tool, and CI keeps a set of canary URLs that fail loudly when a site stops working.
+- File size, duration and storage quota are configurable per tenant, so one user cannot fill the disk.
+- Not supported: DRM-protected content (Cassie will not circumvent it) and live streams (out of scope for this slice).
+- Telegram: public channel posts can be captured through Telegram's public web preview. Private chats and channels need a signed-in session; because Cassie stores no credentials, users sign in by hand in the interactive capture session using the web client. Direct Telegram API access, which needs a stored login session, is not supported.
+- Downloading video may conflict with a platform's terms or with copyright; this belongs on the legal review list.
+
 ## 8. Handling hostile content
 
 - Captures run in an isolated, ephemeral browser (a fresh container per capture) with no access to Cassie's origin, secrets or internal network.
@@ -98,7 +118,7 @@ Every canonical write records trusted user, application and Research Session con
 - **No credentials are stored (decided by the owner, 2026-10-02).** Cassie never stores passwords, MFA codes or TOTP seeds, and does not keep session cookies between captures. Users sign in by hand in the streamed capture browser, and the session ends with its container. There is no credential vault.
 - **Never in evidence.** Captures begin after sign-in completes, so login forms are not screenshotted mid-entry; HTML snapshots exclude values of credential fields; request headers and network records are scrubbed of authorization and cookie values before storage; Job payloads and logs never carry secrets.
 - **Login audit.** When a capture involves a signed-in site, the user records which research identity (site and account name) they used. An audit event stores the site, the account name, the time and the Cassie user, linked to the Capture, and tenant admins can see it through oversight. In this slice Cassie does not verify the account name; it is a label the user supplies.
-- **Interactive sessions (proposed).** Captures that need a login run in an interactive capture session: a disposable container that lives for one sitting and is destroyed at the end, with all cookies and storage discarded. Fully automated captures use a fresh container each time.
+- **Interactive sessions (confirmed by the owner, 2026-10-02).** Captures that need a login run in an interactive capture session: a disposable container that lives for one sitting and is destroyed at the end, with all cookies and storage discarded. Fully automated captures use a fresh container each time.
 
 ## 9. Components for the slice
 
@@ -137,7 +157,7 @@ Quality
 
 ## 12. Open questions
 
-Resolved 2026-10-02: report drafts live in the app (section 6); oversight is explicit, audited and strictly read-only (section 5); capture formats are screenshot, HTML, text, images and videos (section 4); captures run in disposable containers (section 8); Cassie stores no credentials, so there is no vault, no stored MFA seeds and no persisted session cookies (section 8).
+Resolved 2026-10-02: report drafts live in the app (section 6); oversight is explicit, audited and strictly read-only (section 5); capture formats are screenshot, HTML, text, images and videos (section 4); captures run in disposable containers, with an interactive session per sitting when a login is needed (section 8); the video scope is "pretty much any video" using layered acquisition (section 7a); Cassie stores no credentials, so there is no vault, no stored MFA seeds and no persisted session cookies (section 8).
 
-1. Confirm the interactive capture session model: for captures that need a login, one disposable container per sitting instead of one per capture.
-2. Size and time limits for saved video, and which video sources must be supported.
+1. Which video sites must work at launch? The owner named YouTube, Douyin, Telegram and Bilibili, plus "everything in between". A ranked list will drive the canary test set (section 7a).
+2. Default per-tenant limits for file size, duration and storage.

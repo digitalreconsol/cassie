@@ -46,6 +46,7 @@ Updated 2026-10-02.
 - **Oversight is strictly read-only.** No supervisor review comments for now.
 - **Capture formats:** screenshot, HTML snapshot, extracted text, and saved images and videos.
 - **Capture isolation:** a fresh disposable container for every capture.
+- **Video:** save video from essentially any source (YouTube, Douyin, Telegram, Bilibili and others) using layered acquisition: browser-observed capture, an extractor tool, and playback recording as a last resort. Originals are never re-encoded. No DRM circumvention.
 - **Logins:** Cassie stores no passwords, MFA seeds or persistent session cookies. Users sign in by hand in the streamed capture browser. Cassie audits that a login happened (site, account name, time, user), never the credentials.
 
 ### Defaults chosen on the owner's behalf
