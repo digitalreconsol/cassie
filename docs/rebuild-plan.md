@@ -1,6 +1,6 @@
 # Rebuild plan (DRAFT)
 
-Status: proposal for discussion. Items under "Open decisions" are not decided. Nothing here should be treated as final until it is moved to an ADR.
+Status: draft. The "Decisions" section separates what the owner decided, what are working defaults, and what is still open. Nothing here is final until it is moved to an ADR.
 
 ## Goal
 
@@ -23,24 +23,48 @@ A browser-first, Linux-first OSINT research workstation where every capture is p
 
 ## Phases
 
-0. **Spec and decisions.** Fill in the open decisions below; record them as ADRs.
+0. **Spec and decisions.** Close the remaining open decisions; record all decisions as ADRs.
 1. **Foundation.** Repo layout, CI, shared libraries, app template, Core with hardened defaults.
 2. **Vertical slice.** Capture a page -> preserve -> verify -> add to a report, end to end, with tests.
 3. **Port apps one at a time** onto the foundation, in priority order.
 4. **Packaging.** Container images, `ctl` command, then a VM image.
 5. **Pilot** with two or three real analysts.
 
-## Open decisions
+## Decisions
 
-- [ ] Target users and the first workflow to perfect
-- [ ] Deployment modes: personal remote instance, customer-hosted, vendor-hosted
-- [ ] Core database: PostgreSQL or SQLite for single-user installs
-- [ ] How collection runs: server-side browser streamed to the user vs. local collection
-- [ ] Frontend stack and design system
-- [ ] Which Lantern apps to port, and in what order
-- [ ] Authentication: local accounts only, or SSO/MFA from the start
+Updated 2026-10-02.
+
+### Decided by the owner
+
+- **First workflow to perfect:** capture a page -> preserve -> verify -> add to a report.
+- **Deployment, in order:**
+  1. A personal remote instance the owner can log into from anywhere.
+  2. Classroom use: the owner teaches OSINT classes and wants to run Cassie on class systems. Two candidate models, to be chosen later: a VM image students import, or one hosted server with an account per student.
+  3. Vendor-hosted SaaS is not a goal now, but the design must keep the door open (see design rules below).
+
+### Defaults chosen on the owner's behalf
+
+The owner had no preference on these. They are working defaults and can be changed at any time.
+
+- **Core database:** PostgreSQL only, run as a container. One code path; supports multi-user classes and later hosting.
+- **Collection:** the capture browser runs server-side and is streamed to the user's browser. In a VM image this is simply localhost, so classes work the same way.
+- **Frontend:** React + TypeScript, one shared design system.
+- **Sign-in:** local accounts with MFA first; SSO (OIDC/SAML) added later.
+- **App port order:** Scout (capture), Codex (verify) and Workbench (reports) first, then Watchtower, a merged Crawler (Pathfinder + Scanner), Matchbook, and Observatory.
+
+### Design rules that keep the SaaS door open
+
+- Tenancy stays in the data model (organizations and workspaces).
+- Each deployment is self-contained: config and secrets live outside the code.
+- Everything ships as containers.
+- A hosted offering would start as one single-tenant instance per customer, before any shared multi-tenancy.
+
+### Still open
+
+- [ ] Classroom model: importable VM image vs. one hosted server with per-student accounts
 - [ ] Licensing and third-party tool review before redistributing anything
 - [ ] Final project name (Cassie is a working name)
+- [ ] Customers in government: which kinds (federal, state/local, law enforcement) and whether they would run it in their own environment
 
 ## Non-goals (proposed)
 
