@@ -43,6 +43,8 @@ Updated 2026-10-02.
   3. Vendor-hosted SaaS is not a goal now, but the design must keep the door open (see design rules below).
 - **Oversight:** tenant admins and team leads get an explicit, read-only, audit-logged oversight permission over the workspaces in their tenant. The purpose is supervision, for example a team lead checking that their people follow policy, or an instructor reviewing student work.
 - **Report drafts** live in the app. Only exported reports go into Core, as immutable Artifacts with lineage to the evidence they cite.
+- **Oversight is strictly read-only.** No supervisor review comments for now.
+- **Capture formats:** screenshot, HTML snapshot, extracted text, and saved images and videos.
 
 ### Defaults chosen on the owner's behalf
 
