@@ -1,0 +1,46 @@
+# Development only. Production uses the Quadlet units in deploy/quadlet/.
+#
+# Rules (docs/decisions/ADR-003-dev-compose.md):
+# - Postgres is never published, not even on loopback. Reach it with
+#   `./ctl psql`, or from containers on the `backend` network.
+# - Anything that is published binds to ${CASSIE_BIND_ADDR:-127.0.0.1}.
+# - Images are pinned by digest. Each service gets only its own secrets.
+
+name: ${CASSIE_COMPOSE_PROJECT:-cassie-dev}
+
+services:
+  postgres:
+    # postgres:18-alpine
+    image: docker.io/library/postgres@sha256:77f585114c32fbca283dc835b0596f4e52b51b4c6662d7810b2f4084f60a1873
+    user: "70:70"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    environment:
+      POSTGRES_USER: cassie
+      POSTGRES_DB: cassie
+      POSTGRES_PASSWORD_FILE: /run/secrets/postgres_password
+    secrets:
+      - postgres_password
+    tmpfs:
+      - /var/run/postgresql:uid=70,gid=70
+      - /tmp:uid=70,gid=70
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks: [backend]
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "cassie", "-d", "cassie"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+networks:
+  backend:
+    internal: true
+
+volumes:
+  pgdata:
+
+secrets:
+  postgres_password:
+    file: ../../var/secrets/postgres_password

@@ -1,0 +1,9 @@
+{
+  "extends": "../../../tsconfig.base.json",
+  "compilerOptions": {
+    // The lint-policy test imports the repo's eslint.config.js.
+    "allowJs": true,
+    "types": ["node"]
+  },
+  "include": ["src"]
+}

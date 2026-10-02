@@ -1,0 +1,72 @@
+# Virtual workspace root: holds shared tool config and the dev toolchain.
+# Packages live in libs/py/* and core/.
+
+[tool.uv.workspace]
+members = ["libs/py/*", "core"]
+
+[tool.uv]
+required-version = ">=0.12"
+package = false
+
+[tool.uv.sources]
+cassie-safefetch = { workspace = true }
+cassie-auth = { workspace = true }
+cassie-logging = { workspace = true }
+cassie-testing = { workspace = true }
+cassie-core = { workspace = true }
+
+[dependency-groups]
+dev = [
+  "cassie-safefetch",
+  "cassie-auth",
+  "cassie-logging",
+  "cassie-testing",
+  "cassie-core",
+  "mypy",
+  "pytest",
+  "pytest-cov",
+  "ruff",
+]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["libs/py/*/src", "core/src"]
+
+[tool.ruff.lint]
+select = [
+  "E", "W", "F", "I", "B", "UP", "S", "C4", "SIM", "RUF", "N", "PT", "PL", "TRY", "DTZ", "ASYNC",
+]
+ignore = [
+  "PLR0913",  # explicit keyword arguments are clearer than parameter objects here
+  "TRY003",   # short messages on raise are fine
+]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S101", "PLR2004", "S105", "S106"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_unreachable = true
+files = ["libs/py", "core"]
+exclude = ['/build/', '/\.venv/']
+explicit_package_bases = true
+mypy_path = ["libs/py/cassie_safefetch/src", "libs/py/cassie_auth/src", "libs/py/cassie_logging/src", "libs/py/cassie_testing/src", "core/src"]
+
+[tool.pytest.ini_options]
+addopts = ["--import-mode=importlib", "--strict-markers", "--strict-config", "-ra"]
+testpaths = ["libs/py", "core"]
+markers = [
+  "integration: needs a real PostgreSQL container (run with ./ctl check test-integration)",
+]
+xfail_strict = true
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+branch = true
+source_pkgs = ["cassie_safefetch", "cassie_auth", "cassie_logging", "cassie_testing"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true

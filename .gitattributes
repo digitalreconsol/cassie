@@ -1,0 +1,6 @@
+# Linux first: every text file is LF in the working tree, on every OS.
+* text=auto eol=lf
+ctl text eol=lf
+*.sh text eol=lf
+*.png binary
+*.jpg binary
