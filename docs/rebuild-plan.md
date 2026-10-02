@@ -46,7 +46,7 @@ Updated 2026-10-02.
 - **Oversight is strictly read-only.** No supervisor review comments for now.
 - **Capture formats:** screenshot, HTML snapshot, extracted text, and saved images and videos.
 - **Capture isolation:** a fresh disposable container for every capture.
-- **Logins:** credentials for research identities are stored in an encrypted vault, never in evidence. Users can use an identity but not read its secret; only the tenant admin can reveal it, after re-authenticating, and every use and reveal is audited.
+- **Logins:** Cassie stores no passwords, MFA seeds or persistent session cookies. Users sign in by hand in the streamed capture browser. Cassie audits that a login happened (site, account name, time, user), never the credentials.
 
 ### Defaults chosen on the owner's behalf
 
