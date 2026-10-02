@@ -41,6 +41,8 @@ Updated 2026-10-02.
   1. A personal remote instance the owner can log into from anywhere.
   2. Classroom use: the owner teaches OSINT classes and wants to run Cassie on class systems. Two candidate models, to be chosen later: a VM image students import, or one hosted server with an account per student.
   3. Vendor-hosted SaaS is not a goal now, but the design must keep the door open (see design rules below).
+- **Oversight:** tenant admins and team leads get an explicit, read-only, audit-logged oversight permission over the workspaces in their tenant. The purpose is supervision, for example a team lead checking that their people follow policy, or an instructor reviewing student work.
+- **Report drafts** live in the app. Only exported reports go into Core, as immutable Artifacts with lineage to the evidence they cite.
 
 ### Defaults chosen on the owner's behalf
 

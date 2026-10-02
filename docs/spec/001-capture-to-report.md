@@ -58,7 +58,7 @@ From the rebuild plan: platform operator, tenant admin (instructor or organizati
 
 - A tenant is an Organization. Organization membership alone does not grant access to a Workspace (kept from Lantern).
 - Each regular user (for example a student) works in their own Workspace.
-- Tenant admins need oversight of every Workspace in their tenant. Proposal: a distinct, explicit **oversight** permission, read-only by default, separate from OWNER, and every use is written to the audit log. This is a change from Lantern, where admin access did not silently imply research access, and it needs a deliberate ADR.
+- Tenant admins and team leads need oversight of every Workspace in their tenant. **Decided (owner, 2026-10-02):** oversight is a distinct, explicit permission, separate from OWNER and read-only by default. Its purpose is supervision, such as a team lead checking that their people follow policy and procedure, or an instructor reviewing student work. Every use is written to the audit log, and users are told it exists. This is a deliberate change from Lantern, where admin access did not silently imply research access, and it needs its own ADR.
 - Role changes follow explicit escalation rules, each with a test. In Lantern, `add_workspace_member` (verified in `services/platform.py`) lets anyone with the manage-members permission, which ADMIN holds, assign any role including OWNER and overwrite an existing member's role, without checking organization membership.
 - The platform operator manages tenants and the installation but has no access to tenant research data.
 
@@ -66,7 +66,7 @@ From the rebuild plan: platform operator, tenant admin (instructor or organizati
 
 A Report is a document that cites evidence. Lantern's Core has no Report primitive; boards and exports lived in the Workbench app. So this is new.
 
-Proposal:
+Decided (owner, 2026-10-02):
 
 - Drafts are owned by the web app's own store (app state), not by Core.
 - Every citation records the Artifact id, its SHA-256, the Capture id and the capture time. A citation therefore pins exact bytes.
@@ -131,8 +131,9 @@ Quality
 
 ## 12. Open questions
 
-1. Should Report drafts live in the app store (proposed) or in Core?
-2. Is an oversight permission acceptable for instructors, or should students explicitly share workspaces with them?
-3. Which capture formats matter most for the first release beyond screenshot and HTML?
-4. How should capture browser logins (accounts a user signs into) be handled without storing credentials in jobs? Lantern's rule applies: store secret references, never passwords or cookies.
-5. How much isolation does a classroom server need per student: a container per capture, or a pool with per-student limits?
+Resolved 2026-10-02: report drafts live in the app, not Core (section 6); oversight access is granted as an explicit, audited permission (section 5).
+
+1. Which capture formats matter most for the first release beyond screenshot and HTML?
+2. How should capture browser logins (accounts a user signs into) be handled without storing credentials in jobs? Lantern's rule applies: store secret references, never passwords or cookies.
+3. How much isolation does a classroom server need per student: a container per capture, or a pool with per-student limits?
+4. Should supervisors be able to leave review comments on a user's captures and reports (a "reviewed by" record), in addition to read-only oversight? This follows from the supervision use case.
