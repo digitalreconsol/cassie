@@ -53,6 +53,14 @@ The owner had no preference on these. They are working defaults and can be chang
 - **App port order:** Scout (capture), Codex (verify) and Workbench (reports) first, then Watchtower, a merged Crawler (Pathfinder + Scanner), Matchbook, and Observatory.
 - **Classroom model:** one class server with browser clients. Students need only a browser, so their laptops (any OS or CPU) do not matter. The same server image runs on a cloud VM or on a machine in the room. A per-student install of the same image stays available as a fallback for offline or special cases. The owner said classes could be either laptops or provided machines, so this model avoids depending on either.
 
+### Roles (confirmed by the owner: instructor = tenant admin, students = regular users)
+
+- **Platform operator:** runs the server and creates tenants. Does not browse tenant data.
+- **Tenant admin** (the instructor, or an organization's admin): creates and disables accounts, sees all workspaces in the tenant, resets or exports them, reads the audit log.
+- **Regular user:** sees only their own workspace; cannot see other users' data or manage users or settings.
+- The same model serves classes, customer-hosted deployments and any later hosted offering.
+- Role changes follow explicit escalation rules with tests (Lantern let a workspace admin assign OWNER). Admin access to another user's workspace is audit-logged, and users are told it is possible.
+
 ### Classroom requirements (proposed)
 
 - Multiple users with an instructor role and a separate workspace per student; the instructor can see all of them.
