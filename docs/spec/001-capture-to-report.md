@@ -98,12 +98,18 @@ The owner needs to save video from essentially any source, such as YouTube, Douy
 
 The order can differ per site.
 
+Launch sites (the owner asked for YouTube, TikTok and anything Chinese; the concrete list is a proposal):
+- Must work: YouTube, TikTok.
+- Chinese platforms, best effort with canary tests: Douyin, Bilibili, Weibo, Kuaishou, Xiaohongshu.
+- Likely limited: WeChat (a closed ecosystem), and Youku, iQiyi and Tencent Video (often DRM or paid).
+- Chinese platforms change often and may need a sign-in or a region, or block automated access. "Works" means passing the canary test on a given day, not a promise.
+
 Rules:
 - Save the original streams without re-encoding. Any transcode or remux for playback is a separate derived Artifact with lineage to the original (invariant 7).
 - Record for every media Artifact: the source page and media URL, acquisition method, tool and version, selected format, hash, time, and the page's own metadata (title, uploader, upload date, description) as `capture/media-metadata`.
 - Keep a screenshot of the page alongside the media so the context is preserved.
 - Extractors will break, so the capture image must be quick to rebuild with an updated tool, and CI keeps a set of canary URLs that fail loudly when a site stops working.
-- File size, duration and storage quota are configurable per tenant, so one user cannot fill the disk.
+- Default limits, to be tuned after real use: one video up to 2 GB and 3 hours; 25 GB of storage per user; 500 GB per tenant; 2 concurrent captures per user; a warning at 80 percent of a quota. Tenant admins can adjust them within limits the platform operator sets, so one user cannot fill the disk.
 - Not supported: DRM-protected content (Cassie will not circumvent it) and live streams (out of scope for this slice).
 - Telegram: public channel posts can be captured through Telegram's public web preview. Private chats and channels need a signed-in session; because Cassie stores no credentials, users sign in by hand in the interactive capture session using the web client. Direct Telegram API access, which needs a stored login session, is not supported.
 - Downloading video may conflict with a platform's terms or with copyright; this belongs on the legal review list.
@@ -157,7 +163,6 @@ Quality
 
 ## 12. Open questions
 
-Resolved 2026-10-02: report drafts live in the app (section 6); oversight is explicit, audited and strictly read-only (section 5); capture formats are screenshot, HTML, text, images and videos (section 4); captures run in disposable containers, with an interactive session per sitting when a login is needed (section 8); the video scope is "pretty much any video" using layered acquisition (section 7a); Cassie stores no credentials, so there is no vault, no stored MFA seeds and no persisted session cookies (section 8).
+Resolved 2026-10-02: report drafts live in the app (section 6); oversight is explicit, audited and strictly read-only (section 5); capture formats are screenshot, HTML, text, images and videos (section 4); captures run in disposable containers, with an interactive session per sitting when a login is needed (section 8); the video scope is "pretty much any video" using layered acquisition, with launch sites and default limits set in section 7a; Cassie stores no credentials, so there is no vault, no stored MFA seeds and no persisted session cookies (section 8).
 
-1. Which video sites must work at launch? The owner named YouTube, Douyin, Telegram and Bilibili, plus "everything in between". A ranked list will drive the canary test set (section 7a).
-2. Default per-tenant limits for file size, duration and storage.
+None open for this slice. Add new questions here as they come up.
