@@ -14,3 +14,5 @@ Planning. There is no code yet.
 - [docs/rebuild-plan.md](docs/rebuild-plan.md): proposed plan and the decisions still open. Draft; nothing in it is decided until it is marked so.
 - [docs/spec/001-capture-to-report.md](docs/spec/001-capture-to-report.md): draft spec for the first vertical slice (Core data model, roles, capture to verified report, acceptance criteria).
 - [docs/prompts/001-foundation.md](docs/prompts/001-foundation.md): the prompt for building the technical foundation (layout, CI, shared libraries, app template, Core skeleton) with Claude Code in VS Code.
+- [docs/prompts/000-full-build.md](docs/prompts/000-full-build.md): the gated, resumable prompt that builds the whole suite (foundation, vertical slice, remaining apps, packaging, hardening).
+
